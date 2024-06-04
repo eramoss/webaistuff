@@ -1,0 +1,22 @@
+services:
+  db:
+    image: 'postgres:16'
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - 'pgdata:/var/lib/postgresql/data'
+  web:
+    build: 
+      context: .
+      dockerfile: Dockerfile.dev
+    depends_on:
+      - db
+    env_file:
+      - .env
+    ports:
+      - '4000:4000'
+    volumes:
+      - .:/app
+volumes:
+  pgdata:
