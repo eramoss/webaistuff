@@ -6,7 +6,7 @@ LABEL maintainer="Eramoss <edulramos@outlook.com>"
 
 WORKDIR /app
 
-RUN apt-get update -y && apt-get install -y build-essential git \
+RUN apt-get update -y && apt-get install -y build-essential git inotify-tools \
     && apt-get clean && rm -f /var/lib/apt/lists/*_*
 
 COPY . /app/
@@ -15,9 +15,18 @@ RUN mix deps.get
 RUN mix assets.setup
 RUN mix deps.compile
 
+
+# Ensuring passing env vars to build, to ecto create the database
 # make sure that the database is configured and referenced at env file
-RUN mix ecto.create
+ARG POSTGRES_DB
+ARG POSTGRES_HOST
+ARG POSTGRES_USER
+ARG POSTGRES_PASSWORD
+ENV POSTGRES_DB=${POSTGRES_DB}
+ENV POSTGRES_HOST=${POSTGRES_HOST}
+ENV POSTGRES_USER=${POSTGRES_USER}
+ENV POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
 
 EXPOSE 4000
 
-CMD ["iex", "-S", "mix", "phx.server"]
+CMD ["sh", "-c", "mix ecto.create && iex -S mix phx.server"]
