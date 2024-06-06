@@ -10,28 +10,33 @@ defmodule WebaistuffWeb.Router do
     plug :put_secure_browser_headers
   end
 
+  pipeline :ensure_authenticated do
+    plug WebaistuffWeb.Plugs.EnsureAuthenticated
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
 
   scope "/", WebaistuffWeb do
     pipe_through :browser
-
     get "/", PageController, :home
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", WebaistuffWeb do
-  #   pipe_through :api
-  # end
+  scope "/app", WebaistuffWeb do
+    pipe_through [:browser, :ensure_authenticated]
+    get "/", PageController, :home
+  end
+
+  scope "/login", WebaistuffWeb do
+    pipe_through :browser
+    get "/", PageController, :login
+    post "/", PageController, :login
+  end
+
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:webaistuff, :dev_routes) do
-    # If you want to use the LiveDashboard in production, you should put
-    # it behind authentication and allow only admins to access it.
-    # If your application does not have an admins-only section yet,
-    # you can use Plug.BasicAuth to set up some basic authentication
-    # as long as you are also using SSL (which you should anyway).
     import Phoenix.LiveDashboard.Router
 
     scope "/dev" do
