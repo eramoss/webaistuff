@@ -13,10 +13,6 @@ defmodule WebaistuffWeb.Router do
     plug :fetch_current_user
   end
 
-  pipeline :ensure_authenticated do
-    plug WebaistuffWeb.Plugs.EnsureAuthenticated
-  end
-
   pipeline :api do
     plug :accepts, ["json"]
   end
@@ -25,18 +21,6 @@ defmodule WebaistuffWeb.Router do
     pipe_through :browser
     get "/", PageController, :home
   end
-
-  scope "/app", WebaistuffWeb do
-    pipe_through [:browser, :ensure_authenticated]
-    get "/", PageController, :home
-  end
-
-  scope "/login", WebaistuffWeb do
-    pipe_through :browser
-    get "/", PageController, :login
-    post "/", PageController, :login
-  end
-
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:webaistuff, :dev_routes) do
