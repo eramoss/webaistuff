@@ -7,6 +7,15 @@
 # General application configuration
 import Config
 
+config :ueberauth, Ueberauth,
+  providers: [
+    github: {Ueberauth.Strategy.Github, [default_scope: "user:email", allow_private_emails: true]}
+  ]
+
+config :ueberauth, Ueberauth.Strategy.Github.OAuth,
+  client_id: System.get_env("GITHUB_CLIENT_ID"),
+  client_secret: System.get_env("GITHUB_CLIENT_SECRET")
+
 config :webaistuff,
   ecto_repos: [Webaistuff.Repo],
   generators: [timestamp_type: :utc_datetime]

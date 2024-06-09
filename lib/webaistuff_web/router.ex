@@ -71,4 +71,13 @@ defmodule WebaistuffWeb.Router do
       live "/users/confirm", UserConfirmationInstructionsLive, :new
     end
   end
+
+  scope "/auth", WebaistuffWeb do
+    pipe_through :browser
+
+    get "/:provider", OAuthController, :request
+    get "/:provider/callback", OAuthController, :callback
+    post "/:provider/callback", OAuthController, :callback
+    delete "/logout", OAuthController, :delete
+  end
 end
