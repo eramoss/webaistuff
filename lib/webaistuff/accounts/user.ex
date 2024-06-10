@@ -6,6 +6,9 @@ defmodule Webaistuff.Accounts.User do
     field :email, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
+    field :provider, :string
+    field :provider_uid, :string
+    field :avatar_url, :string
     field :confirmed_at, :naive_datetime
 
     timestamps(type: :utc_datetime)
@@ -36,9 +39,11 @@ defmodule Webaistuff.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :password])
+    |> cast(attrs, [:email, :password, :provider, :provider_uid, :avatar_url])
     |> validate_email(opts)
-    |> validate_password(opts)
+    |> maybe_validate_provider(opts)
+    |> maybe_validate_password(opts)
+    |> maybe_hash_password(opts)
   end
 
   defp validate_email(changeset, opts) do
@@ -49,15 +54,38 @@ defmodule Webaistuff.Accounts.User do
     |> maybe_validate_unique_email(opts)
   end
 
+
+  defp maybe_validate_password(changeset, opts) do
+    if !Keyword.get(opts, :validate_provider, true) do
+      validate_password(changeset, opts)
+    else
+      changeset
+    end
+  end
+
   defp validate_password(changeset, opts) do
     changeset
     |> validate_required([:password])
     |> validate_length(:password, min: 12, max: 72)
     # Examples of additional password validation:
-    # |> validate_format(:password, ~r/[a-z]/, message: "at least one lower case character")
-    # |> validate_format(:password, ~r/[A-Z]/, message: "at least one upper case character")
-    # |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/, message: "at least one digit or punctuation character")
+    |> validate_format(:password, ~r/[a-z]/, message: "at least one lower case character")
+    |> validate_format(:password, ~r/[A-Z]/, message: "at least one upper case character")
+    |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/, message: "at least one digit or punctuation character")
     |> maybe_hash_password(opts)
+  end
+
+  defp maybe_validate_provider(changeset, opts) do
+    if Keyword.get(opts, :validate_provider, true) do
+      validate_provider(changeset)
+    else
+      changeset
+    end
+  end
+
+  defp validate_provider(changeset) do
+    changeset
+    |> validate_required([:provider])
+    |> validate_inclusion(:provider, ["github", "Google", "Facebook", "Twitter", "LinkedIn", "Microsoft", "Apple"])
   end
 
   defp maybe_hash_password(changeset, opts) do

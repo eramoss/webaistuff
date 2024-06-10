@@ -74,12 +74,15 @@ defmodule Webaistuff.Accounts do
       {:error, %Ecto.Changeset{}}
 
   """
-  def register_user(attrs) do
-    %User{}
-    |> User.registration_changeset(attrs)
-    |> Repo.insert()
-  end
+  def register_user(attrs, opts \\ []) do
+      IO.inspect(opts)
+      user = %User{}
+      |> User.registration_changeset(attrs, opts)
+      |> Repo.insert()
+      IO.inspect(user)
 
+      user
+  end
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking user changes.
 
@@ -349,5 +352,9 @@ defmodule Webaistuff.Accounts do
       {:ok, %{user: user}} -> {:ok, user}
       {:error, :user, changeset, _} -> {:error, changeset}
     end
+  end
+
+  def get_user_by_provider(provider, provider_uid) do
+    Repo.get_by(User, provider: provider, provider_uid: to_string(provider_uid))
   end
 end

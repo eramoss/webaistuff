@@ -4,21 +4,14 @@ defmodule Webaistuff.UserFromAuth do
   """
   require Logger
   require Jason
-
+  alias Webaistuff.Accounts
   alias Ueberauth.Auth
 
-  def find_or_create(%Auth{provider: :identity} = auth) do
-    case validate_pass(auth.credentials) do
-      :ok ->
-        {:ok, basic_info(auth)}
-
-      {:error, reason} ->
-        {:error, reason}
+  def find_or_create(auth, provider) do
+    case Accounts.get_user_by_provider(provider, auth.uid) do
+      nil -> create_user(auth, provider)
+      user -> {:ok, user}
     end
-  end
-
-  def find_or_create(%Auth{} = auth) do
-    {:ok, basic_info(auth)}
   end
 
   # github does it this way
@@ -34,8 +27,8 @@ defmodule Webaistuff.UserFromAuth do
     nil
   end
 
-  defp basic_info(auth) do
-    %{id: auth.uid, name: name_from_auth(auth), avatar: avatar_from_auth(auth)}
+  defp basic_info(auth, provider) do
+    %{name: name_from_auth(auth), avatar: avatar_from_auth(auth), email: email_from_auth(auth), provider: provider, provider_uid: to_string(auth.uid)}
   end
 
   defp name_from_auth(auth) do
@@ -54,17 +47,16 @@ defmodule Webaistuff.UserFromAuth do
     end
   end
 
-  defp validate_pass(%{other: %{password: nil}}) do
-    {:error, "Password required"}
+  defp email_from_auth(%Auth{info: %{email: email}}), do: email
+
+
+  defp create_user(%Auth{} = auth, provider) do
+    user = Accounts.register_user(basic_info(auth, provider), [validate_provider: true])
+
+    case user do
+      {:ok, user} -> {:ok, user}
+      {:error, changeset} -> {:error, "Failed to create user: #{inspect(changeset)}"}
+    end
   end
 
-  defp validate_pass(%{other: %{password: pw, password_confirmation: pw}}) do
-    :ok
-  end
-
-  defp validate_pass(%{other: %{password: _}}) do
-    {:error, "Passwords do not match"}
-  end
-
-  defp validate_pass(_), do: {:error, "Password Required"}
 end
