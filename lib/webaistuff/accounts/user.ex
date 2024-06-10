@@ -56,7 +56,7 @@ defmodule Webaistuff.Accounts.User do
 
 
   defp maybe_validate_password(changeset, opts) do
-    if !Keyword.get(opts, :validate_provider, true) do
+    if Keyword.get(opts, :validate_password, true) do
       validate_password(changeset, opts)
     else
       changeset

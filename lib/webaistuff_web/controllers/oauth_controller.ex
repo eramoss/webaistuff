@@ -7,6 +7,7 @@ defmodule WebaistuffWeb.OAuthController do
 
   plug Ueberauth
 
+  alias WebaistuffWeb.UserAuth
   alias Webaistuff.UserFromAuth
 
   def delete(conn, _params) do
@@ -23,12 +24,11 @@ defmodule WebaistuffWeb.OAuthController do
   end
 
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
-    case UserFromAuth.find_or_create(auth, "github") do
+    case UserFromAuth.find_or_create(auth, to_string(auth.provider)) do
       {:ok, user} ->
         conn
         |> put_flash(:info, "Successfully authenticated.")
-        |> put_session(:current_user, user)
-        |> configure_session(renew: true)
+        |> UserAuth.log_in_user(user)
         |> redirect(to: "/")
 
       {:error, reason} ->

@@ -51,7 +51,7 @@ defmodule Webaistuff.UserFromAuth do
 
 
   defp create_user(%Auth{} = auth, provider) do
-    user = Accounts.register_user(basic_info(auth, provider), [validate_provider: true])
+    user = Accounts.register_user(basic_info(auth, provider), [validate_provider: true, validate_password: false])
 
     case user do
       {:ok, user} -> {:ok, user}
