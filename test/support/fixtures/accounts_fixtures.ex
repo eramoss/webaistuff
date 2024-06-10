@@ -5,7 +5,7 @@ defmodule Webaistuff.AccountsFixtures do
   """
 
   def unique_user_email, do: "user#{System.unique_integer()}@example.com"
-  def valid_user_password, do: "hello world!"
+  def valid_user_password, do: "asldu&hqjs#@ADASej"
 
   def valid_user_attributes(attrs \\ %{}) do
     Enum.into(attrs, %{
@@ -18,7 +18,7 @@ defmodule Webaistuff.AccountsFixtures do
     {:ok, user} =
       attrs
       |> valid_user_attributes()
-      |> Webaistuff.Accounts.register_user()
+      |> Webaistuff.Accounts.register_user([validate_password: true, validate_provider: false])
 
     user
   end

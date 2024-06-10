@@ -28,7 +28,7 @@ defmodule Webaistuff.UserFromAuth do
   end
 
   defp basic_info(auth, provider) do
-    %{name: name_from_auth(auth), avatar: avatar_from_auth(auth), email: email_from_auth(auth), provider: provider, provider_uid: to_string(auth.uid)}
+    %{name: name_from_auth(auth), avatar_url: avatar_from_auth(auth), email: email_from_auth(auth), provider: provider, provider_uid: to_string(auth.uid)}
   end
 
   defp name_from_auth(auth) do

@@ -37,7 +37,7 @@ defmodule Webaistuff.Accounts.User do
       submitting the form), this option can be set to `false`.
       Defaults to `true`.
   """
-  def registration_changeset(user, attrs, opts \\ []) do
+  def registration_changeset(user, attrs, opts \\ [validate_password: true, validate_povider: false]) do
     user
     |> cast(attrs, [:email, :password, :provider, :provider_uid, :avatar_url])
     |> validate_email(opts)

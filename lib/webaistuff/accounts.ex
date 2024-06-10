@@ -74,7 +74,7 @@ defmodule Webaistuff.Accounts do
       {:error, %Ecto.Changeset{}}
 
   """
-  def register_user(attrs, opts \\ []) do
+  def register_user(attrs, opts \\ [validate_password: true, validate_provider: false]) do
       %User{}
       |> User.registration_changeset(attrs, opts)
       |> Repo.insert()
