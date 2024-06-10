@@ -1,4 +1,5 @@
 defmodule Webaistuff.Accounts.User do
+  alias Ueberauth.Auth
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -155,6 +156,13 @@ defmodule Webaistuff.Accounts.User do
   def confirm_changeset(user) do
     now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
     change(user, confirmed_at: now)
+  end
+
+  def confirm_change_from_auth(%Auth{extra: _} = auth) do
+    user = Webaistuff.Accounts.get_user_by_provider(to_string(auth.provider), to_string(auth.uid))
+    |> Webaistuff.Accounts.User.confirm_changeset()
+    |> Webaistuff.Repo.update()
+    user
   end
 
   @doc """

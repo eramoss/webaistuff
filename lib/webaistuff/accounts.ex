@@ -4,6 +4,7 @@ defmodule Webaistuff.Accounts do
   """
 
   import Ecto.Query, warn: false
+  alias Ueberauth.Auth
   alias Webaistuff.Repo
 
   alias Webaistuff.Accounts.{User, UserToken, UserNotifier}
@@ -274,6 +275,10 @@ defmodule Webaistuff.Accounts do
   If the token matches, the user account is marked as confirmed
   and the token is deleted.
   """
+  def confirm_user(%Auth{extra: _} = auth) do
+    User.confirm_change_from_auth(auth)
+  end
+
   def confirm_user(token) do
     with {:ok, query} <- UserToken.verify_email_token_query(token, "confirm"),
          %User{} = user <- Repo.one(query),
@@ -283,6 +288,8 @@ defmodule Webaistuff.Accounts do
       _ -> :error
     end
   end
+
+
 
   defp confirm_user_multi(user) do
     Ecto.Multi.new()

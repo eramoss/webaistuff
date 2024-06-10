@@ -9,7 +9,10 @@ defmodule Webaistuff.UserFromAuth do
 
   def find_or_create(auth) do
     case Accounts.get_user_by_provider(provider_from_auth(auth), provider_uid_from_auth(auth)) do
-      nil -> create_user(auth)
+      nil ->
+        create_user(auth)
+        Accounts.confirm_user(auth)
+
       user -> {:ok, user}
     end
   end

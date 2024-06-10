@@ -2,7 +2,6 @@ defmodule WebaistuffWeb.OAuthController do
   @moduledoc """
   Auth controller responsible for handling Ueberauth responses
   """
-
   use WebaistuffWeb, :controller
 
   plug Ueberauth
