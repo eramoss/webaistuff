@@ -9,7 +9,7 @@ import Config
 
 config :ueberauth, Ueberauth,
   providers: [
-    github: {Ueberauth.Strategy.Github, [default_scope: "user:email", allow_private_emails: true]}
+    github: {Ueberauth.Strategy.Github, [default_scope: "user:email"]}
   ]
 
 config :ueberauth, Ueberauth.Strategy.Github.OAuth,

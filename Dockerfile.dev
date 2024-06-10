@@ -29,4 +29,4 @@ ENV POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
 
 EXPOSE 4000
 
-CMD ["sh", "-c", "mix ecto.create && iex -S mix phx.server"]
+CMD ["sh", "-c", "mix ecto.migrate && iex -S mix phx.server"]
