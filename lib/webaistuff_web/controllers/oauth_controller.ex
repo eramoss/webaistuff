@@ -24,7 +24,7 @@ defmodule WebaistuffWeb.OAuthController do
   end
 
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
-    case UserFromAuth.find_or_create(auth, to_string(auth.provider)) do
+    case UserFromAuth.find_or_create(auth) do
       {:ok, user} ->
         conn
         |> put_flash(:info, "Successfully authenticated.")

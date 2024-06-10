@@ -75,9 +75,11 @@ defmodule Webaistuff.Accounts do
 
   """
   def register_user(attrs, opts \\ [validate_password: true, validate_provider: false]) do
-      %User{}
+      user = %User{}
       |> User.registration_changeset(attrs, opts)
       |> Repo.insert()
+      IO.inspect(user)
+      user
   end
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking user changes.

@@ -85,7 +85,7 @@ defmodule Webaistuff.Accounts.User do
   defp validate_provider(changeset) do
     changeset
     |> validate_required([:provider])
-    |> validate_inclusion(:provider, ["github", "Google", "Facebook", "Twitter", "LinkedIn", "Microsoft", "Apple"])
+    |> validate_inclusion(:provider, ["github", "google", "facebook", "twitter", "linkedIn", "microsoft", "apple"])
   end
 
   defp maybe_hash_password(changeset, opts) do

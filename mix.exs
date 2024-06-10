@@ -61,6 +61,7 @@ defmodule Webaistuff.MixProject do
       {:bandit, "~> 1.2"},
       {:ueberauth, "~> 0.7"},
       {:ueberauth_github, "~> 0.8"},
+      {:ueberauth_google, "~> 0.8"},
     ]
   end
 
