@@ -2,10 +2,10 @@ import Config
 
 # Configure your database
 config :webaistuff, Webaistuff.Repo,
-  username: System.get_env("POSTGRES_USER") || "postgres",
-  password: System.get_env("POSTGRES_PASSWORD") || "postgres",
-  hostname: System.get_env("POSTGRES_HOST") || "localhost",
-  database: System.get_env("POSTGRES_DB") || "webaistuff_dev",
+  username: System.get_env("POSTGRES_USER"),
+  password: System.get_env("POSTGRES_PASSWORD") ,
+  hostname: System.get_env("POSTGRES_HOST"),
+  database: System.get_env("POSTGRES_DB"),
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
