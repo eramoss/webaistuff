@@ -599,6 +599,18 @@ defmodule WebaistuffWeb.CoreComponents do
     """
   end
 
+  attr :navigate, :any, required: true
+  slot :inner_block, required: true
+  attr :class, :string, default: nil
+  def link_button(assigns) do
+    ~H"""
+      <.link navigate={@navigate} class=
+        "rounded-2xl py-2 px-3 border-2 border-black hover:bg-neutral-100 text-center text-sm font-semibold leading-6 flex items-center justify-center gap-4">
+        <%= render_slot(@inner_block) %>
+      </.link>
+    """
+  end
+
   ## JS Commands
 
   def show(js \\ %JS{}, selector) do
@@ -673,4 +685,7 @@ defmodule WebaistuffWeb.CoreComponents do
   def translate_errors(errors, field) when is_list(errors) do
     for {^field, {msg, opts}} <- errors, do: translate_error({msg, opts})
   end
+
+
+
 end
