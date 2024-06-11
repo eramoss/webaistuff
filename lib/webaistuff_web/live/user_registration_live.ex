@@ -33,24 +33,27 @@ defmodule WebaistuffWeb.UserRegistrationLive do
 
         <.input field={@form[:email]} type="email" label="Email" required />
         <.input field={@form[:password]} type="password" label="Password" required />
-        <div class="flex justify-between w-full">
-          <.link navigate={~p"/auth/github"} class={[
-        "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 hover:bg-zinc-700 py-2 px-3",
-        "text-sm font-semibold leading-6 text-white active:text-white/80",
-      ]}>
-            Login With Github
-          </.link>
-          <.link navigate={~p"/auth/google"} class={[
-        "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 hover:bg-zinc-700 py-2 px-3",
-        "text-sm font-semibold leading-6 text-white active:text-white/80",
-      ]}>
-            Login With Google
-          </.link>
-        </div>
         <:actions>
           <.button phx-disable-with="Creating account..." class="w-full">Create an account</.button>
         </:actions>
       </.simple_form>
+      <div class="py-4 flex flex-col gap-4">
+        <div class="w-full text-center text-gray-500">or</div>
+        <div class="flex gap-4 flex-col w-full">
+          <.link navigate={~p"/auth/github"} class=
+        "rounded-2xl py-2 px-3 border-2 border-black hover:bg-neutral-100 text-center text-sm font-semibold leading-6 ">
+            Login with GitHub <.icon name="hero-github"/>
+          </.link>
+          <.link navigate={~p"/auth/google"} class=
+        "rounded-2xl py-2 px-3 border-2 border-black hover:bg-neutral-100 text-center text-sm font-semibold leading-6 ">
+            Login with Google <.icon name="hero-google"/>
+          </.link>
+          <.link navigate={~p"/auth/apple"} class=
+        "rounded-2xl py-2 px-3 border-2 border-black hover:bg-neutral-100 text-center text-sm font-semibold leading-6 ">
+            Login with Apple <.icon name="hero-apple"/>
+          </.link>
+        </div>
+      </div>
     </div>
     """
   end

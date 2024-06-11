@@ -31,6 +31,23 @@ defmodule WebaistuffWeb.UserLoginLive do
           </.button>
         </:actions>
       </.simple_form>
+      <div class="py-4 flex flex-col gap-4">
+        <div class="w-full text-center text-gray-500">or</div>
+        <div class="flex gap-4 flex-col w-full">
+          <.link navigate={~p"/auth/github"} class=
+        "rounded-2xl py-2 px-3 border-2 border-black hover:bg-neutral-100 text-center text-sm font-semibold leading-6 ">
+            Login with GitHub <.icon name="hero-github"/>
+          </.link>
+          <.link navigate={~p"/auth/google"} class=
+        "rounded-2xl py-2 px-3 border-2 border-black hover:bg-neutral-100 text-center text-sm font-semibold leading-6 ">
+            Login with Google <.icon name="hero-google"/>
+          </.link>
+          <.link navigate={~p"/auth/apple"} class=
+        "rounded-2xl py-2 px-3 border-2 border-black hover:bg-neutral-100 text-center text-sm font-semibold leading-6 ">
+            Login with Apple <.icon name="hero-apple"/>
+          </.link>
+        </div>
+      </div>
     </div>
     """
   end
